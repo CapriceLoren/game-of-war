@@ -50,6 +50,8 @@ class Deck {
   constructor() {
     this.cards = []
     this.createDeck()
+    this.shuffle()
+    // this.draw()
   }
 
   createDeck() {
@@ -77,9 +79,9 @@ class Deck {
     return this.cards;
   }
 
-  draw(){
-    return this.cards.pop()
-  }
+  // draw(){
+  //   return this.cards.pop()
+  // }
 }
 
 class GameOfWar {
@@ -87,6 +89,9 @@ class GameOfWar {
     this.playerOne = []
     this.playerTwo = []
     this.pile = [] 
+    this.gameSetup()
+    // this.draw()
+    this.compareChoices()
   }
   gameSetup(){
     const deck = new Deck()
@@ -95,18 +100,25 @@ class GameOfWar {
     //split deck for each player
     this.playerOne.push(...cards.slice(0, cards.length / 2))
     this.playerTwo.push(...cards.slice(0, cards.length / 2))
-    //this is not pushing
   }
+
+  // draw(){
+  //   return this.cards.pop()
+  // }
+  //.pop is undefined
+
+  //should this be a new class?
   compareChoices() { //should this be a loop?
-    for (let i = 0; i < 2; i++) {
-      this.playerOne.draw()
-      this.playerTwo.draw()
+    for (let i = 0; i < 1; i++) {
+      console.log(this.playerOne.pop())
+      console.log(this.playerTwo.pop())
     }
      // draw for player one and player two
     //cardValue to save score
     //how to access value of card drawn?
       //if playerOne > playerTwo, save score
     //playerOne and playerTwo arent actually holding any value. how do i only compare rank?
+    
     if (this.playerOne.rank === this.playerTwo.rank) {
       console.log("WAR!")
         //call compare choices again? 
@@ -119,4 +131,4 @@ class GameOfWar {
 }
 
 let game = new GameOfWar()
-console.log()
+console.log(game)
