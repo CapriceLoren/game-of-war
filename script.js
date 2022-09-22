@@ -1,43 +1,3 @@
-// /* war:
-//   array of 52 cards split in half, 4 of each kind
-//   each player plays a random card
-//   if player 1 has a higher card, they win
-//   else if player 2 wins
-//     winner accumulates card value
-//       function to save scores
-//   else if tie (war)
-//     play a new card, highest card wins
-//     (loop)
-
-// How do i save scores?
-// */
-
-
-// let playerOne = {
-//   choice: ''
-// }
-
-// let playerTwo = {
-//   choice: ''
-// }
-
-// function cardChoices() {
-//   let randomIndex = Math.floor(Math.random() * deck.length - 1);
-// }
-
-
-// function compareChoices() {
-//   cardChoices()
-//   if (playerOne === playerTwo) {
-//     console.log("WAR!")
-//       //call compare choices again? 
-//   } else if (playerOne > playerTwo){
-//     console.log(`Player One played ${playerOne}, beating ${playerTwo} played by Player Two!`)
-//   } else if (playerOne < playerTwo) {
-//     console.log(`Player Two played ${playerTwo}, beating ${playerOne} played by Player One!`)
-//   } //else?
-// }
-
 class Card {
   constructor(suit, rank, score) {
     this.suit = suit
@@ -51,7 +11,6 @@ class Deck {
     this.cards = []
     this.createDeck()
     this.shuffle()
-    // this.draw()
   }
 
   createDeck() {
@@ -66,69 +25,110 @@ class Deck {
   }
 
   shuffle() {
-    let currentIndex = this.cards.length,  randomIndex;
-  
+    let currentIndex = this.cards.length, randomIndex;
+
     while (currentIndex != 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
-  
+
       [this.cards[currentIndex], this.cards[randomIndex]] = [
         this.cards[randomIndex], this.cards[currentIndex]];
     }
-  
+
     return this.cards;
   }
-
-  // draw(){
-  //   return this.cards.pop()
-  // }
 }
 
 class GameOfWar {
   constructor() {
     this.playerOne = []
     this.playerTwo = []
-    this.pile = [] 
+    this.pile = []
     this.gameSetup()
-    // this.draw()
-    this.compareChoices()
   }
-  gameSetup(){
-    const deck = new Deck()
-    let cards = deck.cards
-  
+
+  gameSetup() {
+    const { cards } = new Deck()
+    // let cards = deck.cards
+
     //split deck for each player
     this.playerOne.push(...cards.slice(0, cards.length / 2))
-    this.playerTwo.push(...cards.slice(0, cards.length / 2))
+    this.playerTwo.push(...cards.slice(cards.length / 2))
+  
   }
 
-  // draw(){
-  //   return this.cards.pop()
-  // }
-  //.pop is undefined
+  war(c1, c2) {
+    //deal 3 cards each
+      this.pile.push(c1, c2)
 
-  //should this be a new class?
-  compareChoices() { //should this be a loop?
-    for (let i = 0; i < 1; i++) {
-      console.log(this.playerOne.pop())
-      console.log(this.playerTwo.pop())
-    }
-     // draw for player one and player two
-    //cardValue to save score
-    //how to access value of card drawn?
-      //if playerOne > playerTwo, save score
-    //playerOne and playerTwo arent actually holding any value. how do i only compare rank?
-    
-    if (this.playerOne.rank === this.playerTwo.rank) {
+      if (this.playerOne.length >= 4 && this.playerTwo.length >= 4) {
+        this.pile.push(...this.playerOne.splice(this.playerOne.length - 3, 3))
+        this.pile.push(...this.playerTwo.splice(this.playerTwo.length - 3, 3))
+      }
+      else {
+        if (this.playerTwo.length < 4) {
+          this.playerOne.unshift(this.pOneCard, this.pTwoCard, ...this.pile)
+          this.pile.length = 0
+          console.log("Player 1 Wins!")
+        } else if (this.playerOne.length < 4) {
+          this.playerTwo.unshift(this.pOneCard, this.pTwoCard, ...this.pile)
+          this.pile.length = 0
+          console.log("Player 2 Wins!")
+        }
+      }
+
+    //if one player doesnt't have 4 cards, they lose
+    //if or while?
+  }
+
+  compareChoices() {
+    while (this.playerOne.length > 0 && this.playerTwo.length > 0) {
+    let pOneCard = this.playerOne.pop()
+    let pTwoCard = this.playerTwo.pop()
+
+    console.log(pOneCard)
+    console.log(pTwoCard)
+
+    if (pOneCard.score > pTwoCard.score) {
+      console.log(`Player One played ${pOneCard.rank}, beating ${pTwoCard.rank} played by Player Two!`)
+
+      this.playerOne.unshift(pOneCard, pTwoCard, ...this.pile)
+      this.pile.length = 0
+
+
+    } else if (pOneCard.score < pTwoCard.score) {
+      console.log(`Player Two played ${pTwoCard.rank}, beating ${pOneCard.rank} played by Player One!`)
+
+
+      this.playerTwo.unshift(pOneCard, pTwoCard, ...this.pile)
+      this.pile.length = 0
+
+    } else if (pOneCard.score === pTwoCard.score) {
       console.log("WAR!")
-        //call compare choices again? 
-    } else if (playerOne.rank > playerTwo.rank){
-      console.log(`Player One played ${playerOne}, beating ${playerTwo} played by Player Two!`)
-    } else if (playerOne.rank < playerTwo.rank) {
-      console.log(`Player Two played ${playerTwo}, beating ${playerOne} played by Player One!`)
-    } //else?
+
+      this.war(pOneCard, pTwoCard)
+
+      } //else?
+      
+      if (this.playerOne.length === 0) {
+        console.log ("Player Two Wins!")
+      } else if (this.playerTwo.length === 0) {
+        console.log ("Player One Wins!")
+      }
   }
+}
 }
 
 let game = new GameOfWar()
+// console.log(game.playerOne.length)
+// console.log(game.playerTwo.length)
+// game.war()
+// console.log(game.playerOne.length)
+// console.log(game.playerTwo.length)
+
+game.compareChoices()
+
 console.log(game)
+
+console.log(game.playerOne.length)
+console.log(game.playerTwo.length)
