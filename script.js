@@ -49,74 +49,70 @@ class GameOfWar {
 
   gameSetup() {
     const { cards } = new Deck()
-    // let cards = deck.cards
-
-    //split deck for each player
     this.playerOne.push(...cards.slice(0, cards.length / 2))
     this.playerTwo.push(...cards.slice(cards.length / 2))
-  
+
   }
 
   war(c1, c2) {
-    //deal 3 cards each
-      this.pile.push(c1, c2)
+    this.pile.push(c1, c2)
 
-      if (this.playerOne.length >= 4 && this.playerTwo.length >= 4) {
-        this.pile.push(...this.playerOne.splice(this.playerOne.length - 3, 3))
-        this.pile.push(...this.playerTwo.splice(this.playerTwo.length - 3, 3))
-      }
-      else {
-        if (this.playerTwo.length < 4) {
-          this.playerOne.unshift(this.pOneCard, this.pTwoCard, ...this.pile)
-          this.pile.length = 0
-          console.log("Player 1 Wins!")
-        } else if (this.playerOne.length < 4) {
-          this.playerTwo.unshift(this.pOneCard, this.pTwoCard, ...this.pile)
-          this.pile.length = 0
-          console.log("Player 2 Wins!")
-        }
-      }
+    if (this.playerOne.length >= 4 && this.playerTwo.length >= 4) {
+      this.pile.push(...this.playerOne.splice(this.playerOne.length - 3, 3))
+      this.pile.push(...this.playerTwo.splice(this.playerTwo.length - 3, 3))
+    }
+    else {
+      if (this.playerTwo.length < 3) {
+        this.playerOne.unshift(...this.pile)
+        this.pile.length = 0
 
-    //if one player doesnt't have 4 cards, they lose
-    //if or while?
+      } else if (this.playerOne.length < 3) {
+        this.playerTwo.unshift(...this.pile)
+        this.pile.length = 0
+      }
+    }
   }
 
   compareChoices() {
     while (this.playerOne.length > 0 && this.playerTwo.length > 0) {
-    let pOneCard = this.playerOne.pop()
-    let pTwoCard = this.playerTwo.pop()
+      let pOneCard = this.playerOne.pop()
+      let pTwoCard = this.playerTwo.pop()
 
-    console.log(pOneCard)
-    console.log(pTwoCard)
+      // console.log(pOneCard)
+      // console.log(pTwoCard)
 
-    if (pOneCard.score > pTwoCard.score) {
-      console.log(`Player One played ${pOneCard.rank}, beating ${pTwoCard.rank} played by Player Two!`)
+      if (pOneCard.score > pTwoCard.score) {
 
-      this.playerOne.unshift(pOneCard, pTwoCard, ...this.pile)
-      this.pile.length = 0
+        this.playerOne.unshift(pOneCard, pTwoCard, ...this.pile)
+        this.pile.length = 0
 
-
-    } else if (pOneCard.score < pTwoCard.score) {
-      console.log(`Player Two played ${pTwoCard.rank}, beating ${pOneCard.rank} played by Player One!`)
+        console.log(`Player One played the ${pOneCard.rank} of ${pOneCard.suit}, beating the ${pTwoCard.rank} of ${pTwoCard.suit} played by Player Two!`)
+        console.log(`Player one has ${this.playerOne.length} cards, while player two has ${this.playerTwo.length}`)
 
 
-      this.playerTwo.unshift(pOneCard, pTwoCard, ...this.pile)
-      this.pile.length = 0
+      } else if (pOneCard.score < pTwoCard.score) {
+        
+        this.playerTwo.unshift(pOneCard, pTwoCard, ...this.pile)
+        this.pile.length = 0
+        
+        console.log(`Player Two played the ${pTwoCard.rank} of ${pTwoCard.suit}, beating the ${pOneCard.rank} of ${pOneCard.suit} played by Player One!`)
+        console.log(`Player one has ${this.playerOne.length} cards, while player two has ${this.playerTwo.length}`)
 
-    } else if (pOneCard.score === pTwoCard.score) {
-      console.log("WAR!")
+      } else if (pOneCard.score === pTwoCard.score) {
+        console.log("WAR!")
+        this.war(pOneCard, pTwoCard)
 
-      this.war(pOneCard, pTwoCard)
-
-      } //else?
-      
-      if (this.playerOne.length === 0) {
-        console.log ("Player Two Wins!")
-      } else if (this.playerTwo.length === 0) {
-        console.log ("Player One Wins!")
       }
+
+    }
+
+    if (this.playerOne.length === 0) {
+      console.log("Player Two Wins!")
+    } else if (this.playerTwo.length === 0) {
+      console.log("Player One Wins!")
+
+    }
   }
-}
 }
 
 let game = new GameOfWar()
@@ -128,7 +124,6 @@ let game = new GameOfWar()
 
 game.compareChoices()
 
-console.log(game)
 
 console.log(game.playerOne.length)
 console.log(game.playerTwo.length)
